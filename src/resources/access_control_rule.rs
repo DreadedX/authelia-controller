@@ -35,6 +35,7 @@ enum AccessPolicy {
 pub struct AccessControlRuleSpec {
     domain: String,
     policy: AccessPolicy,
+    subject: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Hash)]
