@@ -15,6 +15,11 @@ rules:
       - ""
     resources:
       - secrets
+    verbs:
+      - "*"
+  - apiGroups:
+      - "apps"
+    resources:
       - deployments
     verbs:
       - "*"
