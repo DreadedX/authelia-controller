@@ -3,6 +3,7 @@ use std::time::Duration;
 
 use authelia_controller::context::Context;
 use authelia_controller::resources::AccessControlRule;
+use color_eyre::eyre::Context as _;
 use dotenvy::dotenv;
 use futures_util::{StreamExt as _, TryStreamExt as _};
 use kube::runtime::reflector::{self};
@@ -30,6 +31,13 @@ async fn main() -> color_eyre::Result<()> {
     let namespace = std::env::var("AUTHELIA_NAMESPACE").unwrap_or("authelia".into());
     let deployment = std::env::var("AUTHELIA_DEPLOYMENT").unwrap_or("authelia".into());
     let secret = std::env::var("AUTHELIA_SECRET").unwrap_or("authelia-acl".into());
+    let interval = std::env::var("INTERVAL")
+        .map(|interval| {
+            interval
+                .parse()
+                .wrap_err_with(|| format!("INTERVAL={interval}"))
+        })
+        .unwrap_or(Ok(15))?;
 
     info!("Starting");
 
@@ -53,7 +61,6 @@ async fn main() -> color_eyre::Result<()> {
         secret,
     ));
 
-    let interval = 15;
     tokio::spawn(async move {
         reader.wait_until_ready().await.unwrap();
         loop {
