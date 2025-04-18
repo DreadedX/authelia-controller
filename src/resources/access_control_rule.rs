@@ -73,6 +73,7 @@ impl AccessControlRule {
 
         let secret = Secret {
             metadata: ObjectMeta {
+                name: Some(ctx.secret_name.clone()),
                 ..Default::default()
             },
             string_data: Some(contents),
