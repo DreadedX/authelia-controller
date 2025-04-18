@@ -54,7 +54,7 @@ repos:
       - id: udeps
         name: unused
         description: Check for unused crates
-        entry: cargo udeps
+        entry: cargo +nightly udeps
         args: ["--workspace"]
         language: system
         types: [file]
