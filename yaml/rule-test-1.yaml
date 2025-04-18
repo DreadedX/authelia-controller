@@ -1,0 +1,7 @@
+apiVersion: authelia.huizinga.dev/v1
+kind: AccessControlRule
+metadata:
+  name: test-1
+spec:
+  domain: "test-1.domain"
+  policy: one_factor
