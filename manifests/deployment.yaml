@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authelia-controller
+  labels:
+    app: authelia-controller
+    app.kubernetes.io/name: authelia-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authelia-controller
+  template:
+    metadata:
+      labels:
+        app: authelia-controller
+      annotations:
+        kubectl.kubernetes.io/default-container: authelia-controller
+    spec:
+      serviceAccountName: authelia-controller
+      securityContext: {}
+      containers:
+        - name: authelia-controller
+          image: git.huizinga.dev/dreaded_x/authelia-controller@${DIGEST}
+          imagePullPolicy: IfNotPresent
+          securityContext: {}
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 100Mi
+          env:
+            - name: RUST_LOG
+              value: info,authelia_controller=debug

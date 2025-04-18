@@ -1,0 +1,20 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: authelia-controller
+rules:
+  - apiGroups:
+      - authelia.huizinga.dev
+    resources:
+      - accesscontrolrules
+      - accesscontrolrules/status
+      - accesscontrolrules/finalizers
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+      - deployments
+    verbs:
+      - "*"
