@@ -13,7 +13,8 @@ COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 
 COPY . .
-ENV RUSTC_BOOTSTRAP=1
+ARG RELEASE_VERSION
+ENV RELEASE_VERSION=${RELEASE_VERSION}
 RUN cargo auditable build --release
 
 FROM gcr.io/distroless/cc-debian12:nonroot AS runtime

@@ -1,6 +1,7 @@
 use std::sync::Arc;
 use std::time::Duration;
 
+use authelia_controller::VERSION;
 use authelia_controller::context::Context;
 use authelia_controller::resources::AccessControlRule;
 use color_eyre::eyre::Context as _;
@@ -39,7 +40,7 @@ async fn main() -> color_eyre::Result<()> {
         })
         .unwrap_or(Ok(15))?;
 
-    info!("Starting");
+    info!(version = VERSION, "Starting");
 
     let client = Client::try_default().await?;
     let access_control_rules = Api::<AccessControlRule>::all(client.clone());
