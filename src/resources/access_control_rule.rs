@@ -32,7 +32,8 @@ enum AccessPolicy {
     doc = "Custom resource for managing authelia access rules",
     printcolumn = r#"{"name":"Domain", "type":"string", "jsonPath":".spec.domain"}"#,
     printcolumn = r#"{"name":"Policy", "type":"string", "jsonPath":".spec.policy"}"#,
-    printcolumn = r#"{"name":"Subject", "type":"string", "jsonPath":".spec.subject"}"#
+    printcolumn = r#"{"name":"Subject", "type":"string", "jsonPath":".spec.subject"}"#,
+    printcolumn = r#"{"name":"Age", "type":"date", "jsonPath":".metadata.creationTimestamp"}"#
 )]
 #[serde(rename_all = "camelCase")]
 pub struct AccessControlRuleSpec {
