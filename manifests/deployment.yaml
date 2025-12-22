@@ -21,7 +21,7 @@ spec:
       securityContext: {}
       containers:
         - name: authelia-controller
-          image: git.huizinga.dev/dreaded_x/authelia-controller@${DIGEST}
+          image: '{{ index .images "authelia-controller" }}'
           imagePullPolicy: IfNotPresent
           securityContext: {}
           resources:
