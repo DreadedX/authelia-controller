@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: authelia-controller
+  namespace: authelia
   labels:
     app: authelia-controller
     app.kubernetes.io/name: authelia-controller
@@ -18,12 +19,17 @@ spec:
         kubectl.kubernetes.io/default-container: authelia-controller
     spec:
       serviceAccountName: authelia-controller
-      securityContext: {}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: authelia-controller
           image: '{{ index .images "authelia-controller" }}'
           imagePullPolicy: IfNotPresent
-          securityContext: {}
           resources:
             limits:
               cpu: 200m
@@ -34,3 +40,9 @@ spec:
           env:
             - name: RUST_LOG
               value: info,authelia_controller=debug
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
