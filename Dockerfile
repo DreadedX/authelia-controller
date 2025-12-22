@@ -1,7 +1,7 @@
-FROM rust:1.86 AS base
+FROM rust:1.92 AS base
 ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
-RUN cargo install cargo-chef --locked --version 0.1.71 && \
-    cargo install cargo-auditable --locked --version 0.6.6
+RUN cargo install cargo-chef --locked --version 0.1.73 && \
+    cargo install cargo-auditable --locked --version 0.7.2
 WORKDIR /app
 
 FROM base AS planner
@@ -17,7 +17,7 @@ ARG RELEASE_VERSION
 ENV RELEASE_VERSION=${RELEASE_VERSION}
 RUN cargo auditable build --release
 
-FROM gcr.io/distroless/cc-debian12:nonroot AS runtime
+FROM gcr.io/distroless/cc-debian13:nonroot AS runtime
 COPY --from=builder /app/target/release/authelia-controller /authelia-controller
 COPY --from=builder /app/target/release/crdgen /crdgen
 CMD ["/authelia-controller"]
