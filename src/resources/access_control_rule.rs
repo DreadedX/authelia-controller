@@ -45,6 +45,7 @@ pub struct AccessControlRuleSpec {
 #[derive(Serialize, Deserialize, Clone, Debug, Hash)]
 struct AccessControl {
     rules: Vec<AccessControlRuleSpec>,
+    default_policy: AccessPolicy,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Hash)]
@@ -60,14 +61,22 @@ impl AccessControlRule {
         debug!("Updating acl");
         rules.sort_by_cached_key(|rule| rule.name_any());
 
-        let rules = rules
+        let rules: Vec<_> = rules
             .iter()
             .inspect(|rule| trace!(name = rule.name_any(), "Rule found"))
             .map(|rule| rule.spec.clone())
             .collect();
 
         let top = TopLevel {
-            access_control: AccessControl { rules },
+            access_control: AccessControl {
+                // TODO: Make sure configurable?
+                default_policy: if rules.is_empty() {
+                    AccessPolicy::OneFactor
+                } else {
+                    AccessPolicy::Deny
+                },
+                rules,
+            },
         };
 
         let contents = BTreeMap::from([(
